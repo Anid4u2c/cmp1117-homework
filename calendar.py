@@ -57,3 +57,11 @@ def getSchedule():
         # print(datesDictionary)
         # print(dates.index(getDate()))
         return {"dates": dates, "dictionary": datesDictionary}
+
+
+def scheduleCheck(date=getDate(), dates=[]):
+    try:
+        if dates.index(date) >= 0:
+            return True
+    except ValueError:
+        return False
