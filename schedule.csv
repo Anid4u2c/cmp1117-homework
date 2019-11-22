@@ -1,0 +1,30 @@
+Date,Week,Class,Day,Learning Outcome,Chapter,Pages,Quiz,Assignmt,Lab,Outcomes
+9/5/2019,1,1,Thu,1. Use Python to write a simple program.,1,1-24,,,,1
+9/10/2019,2,2,Tue,1. Use Python to write a simple program.,1,1-24,,,Practice,1
+9/12/2019,2,2,Thu,"2. Create a script that reads input, performs work and outputs a response.",2,31-74,Practice,,,2
+9/17/2019,3,2,Tue,"2. Create a script that reads input, performs work and outputs a response.",2,31-74,,,Lab1,2
+9/19/2019,3,2,Thu,3. Write scripts that respond to varying conditions.,3,109-140,Ch2,Hw1,,3
+9/24/2019,4,2,Tue,3. Write scripts that respond to varying conditions.,3,109-140,,,Lab2,3
+9/26/2019,4,2,Thu,4. Write scripts that perform repetitions.,4,159-196,Ch3,Hw2,,4
+10/1/2019,5,2,Tue,4. Write scripts that perform repetitions.,4,159-196,,,Lab 3,4
+10/3/2019,5,2,Thu,5. Write modular programs using functions,5,209-239,Ch4,Hw3,,5
+10/8/2019,6,2,Tue,5. Write modular programs using functions,5,209-239,,,Lab4,5
+10/10/2019,6,2,Thu,6. Write functions that return values.,5,239-268,Ch5,Hw4,,6
+10/15/2019,7,2,Tue,6. Write functions that return values.,5,239-268,,,Lab5,6
+10/17/2019,7,2,Thu,Review,1-5,1-268,Ch1-5,Hw5,,1-6
+10/22/2019,8,2,Tue,Midterm,1-5,1-268,Ch1-5,,,1-6
+10/24/2019,8,2,Thu,Midterm,1-5,1-268,Ch1-5,,,1-6
+10/29/2019,9,2,Tue,7. Process files and handle exceptions.,6,287-337,,Hw6,,7
+10/31/2019,9,2,Thu,7. Process files and handle exceptions.,6,287-337,,,Lab6,7
+11/5/2019,10,2,Tue,8. Use List and Tuple data structures.,7,343-382,Ch6,Hw7,,8
+11/7/2019,10,2,Thu,8. Use List and Tuple data structures.,7,343-382,,,Lab7,8
+11/12/2019,11,2,Tue,9. Use String data within a script.,8,407-431,Ch7,Hw8,,9
+11/14/2019,11,2,Thu,9. Use String data within a script.,8,407-431,,,Lab8,9
+11/19/2019,12,2,Tue,10. Use Dictionary and Set data structures.,9,439-480,Ch8,Hw9,,10
+11/21/2019,12,2,Thu,10. Use Dictionary and Set data structures.,9,439-480,,,Lab9,10
+11/26/2019,13,2,Tue,11. Write programs using custom objects.,10,489-543,Ch9,Hw10,,11
+11/28/2019,13,2,Thu,11. Write programs using custom objects.,10,489-543,,,Lab10,11
+12/3/2019,14,2,Tue,Review,1-10,,Ch10,,,11
+12/5/2019,14,2,Thu,Case,1-10,,,,,1-11
+12/10/2019,15,2,Tue,Final,1-10,,,,,1-11
+12/12/2019,15,2,Thu,Final,1-10,,,,,1-11
