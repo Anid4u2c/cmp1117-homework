@@ -5,8 +5,15 @@ from calendar import getDate, getDateTime, getSchedule, scheduleCheck
 FILENAME = ".config"
 KEY_MAP = {"firstName": "First Name", "lastName": "Last Name",
            "studentId": "Student ID", "dateTime": "Last Updated"}
-
 TEMPLATE = ("dateTime", "firstName", "lastName", "studentId")
+
+
+def configEdit(config):
+    response = input("\r\n\tWould you like to edit the current configuration (N = 'No', Y = 'Yes'):  ")
+    if response.upper() == "Y" and len(response) > 0:
+        return configSet(configOutput(userDataGet()))
+    else:
+        return config
 
 
 def configGet():
@@ -21,12 +28,6 @@ def configGet():
         config = configSet(userDataGet())
     return configEdit(configOutput(config))
 
-def configEdit(config):
-    response = input("\r\n\tWould you like to edit the current configuration (N = 'No', Y = 'Yes'):  ")
-    if response.upper() == "Y" and len(response) > 0:
-        return configSet(configOutput(userDataGet()))
-    else:
-        return config
 
 def configOutput(config):
     try:
@@ -44,9 +45,14 @@ def configOutput(config):
         else:
             return config
 
+
 def configSet(config):
     print("\r\n\tSetting or updating the user configuration for this program:\r\n")
     file = open(FILENAME, "w")
+    # config += "dateTime:  " + config["dateTime"] + "\n"
+    # config += "firstName:  " + config["firstName"] + "\n"
+    # config += "lastName:  " + config["lastName"] + "\n"
+    # config += "studentId:  " + config["studentId"] + "\n"
     file.write(json.dumps(config))
     file.close()
 
@@ -56,7 +62,7 @@ def configSet(config):
 def keyCheck(dictionary, template):
     try:
         success = False
-        for keys in dictionary.keys():
+        for key in dictionary.keys():
             if template.index(key) >= 0:
                 success = True
             else:
@@ -69,7 +75,8 @@ def keyCheck(dictionary, template):
 def main():
     config = configGet()
     today = getDate()
-    today = "2019-11-21"
+    today = "2019-11-21" \
+            ""
     # print(config)
     print("\r\n\tGreat {}!  Today's date is {}...".format(config["firstName"], today))
     # webbrowser.open('file://' + os.path.realpath(FILENAME))
@@ -77,11 +84,12 @@ def main():
     dates = scheduleData["list"]
     courseData = scheduleData["dictionary"]
     if scheduleCheck(today, dates) == True:
-        assignment = courseData[testDate]
+        assignment = courseData[today]
         print("\r\n\tThere's an assignment today:  ")
         for key in assignment.keys():
-    # print("\r\n\t\tkey:  ", key, ", value:  {}".format(assignment[key]))
-
+            print("\t\tkey:  ", key, ", value:  {}".format(assignment[key]))
+    else:
+        print("\r\n\tThere's no assignment today...")
 
 def mapKey(key):
     try:
@@ -89,7 +97,6 @@ def mapKey(key):
     except KeyError:
         value = key
     return value
-
 
 def userDataGet():
     firstName = input('\r\n\tEnter your first name: ')
