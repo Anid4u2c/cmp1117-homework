@@ -15,7 +15,6 @@ def configEdit(config):
     else:
         return config
 
-
 def configGet():
     print("\r\n\tChecking current folder for '.config' file...\r\n")
     try:
@@ -45,7 +44,6 @@ def configOutput(config):
         else:
             return config
 
-
 def configSet(config):
     print("\r\n\tSetting or updating the user configuration for this program:\r\n")
     file = open(FILENAME, "w")
@@ -55,9 +53,7 @@ def configSet(config):
     # config += "studentId:  " + config["studentId"] + "\n"
     file.write(json.dumps(config))
     file.close()
-
     return config
-
 
 def keyCheck(dictionary, template):
     try:
@@ -70,7 +66,6 @@ def keyCheck(dictionary, template):
         return success
     except AttributeError:
         return False
-
 
 def main():
     config = configGet()
@@ -103,6 +98,5 @@ def userDataGet():
     studentId = input('\r\n\tEnter your student ID: ')
     config = {"dateTime": getDateTime(), "firstName": firstName, "lastName": lastName, "studentId": studentId}
     return config
-
 
 main()
