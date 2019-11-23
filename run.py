@@ -75,8 +75,7 @@ def keyCheck(dictionary, template):
 def main():
     config = configGet()
     today = getDate()
-    today = "2019-11-21" \
-            ""
+    today = "2019-11-21"
     # print(config)
     print("\r\n\tGreat {}!  Today's date is {}...".format(config["firstName"], today))
     # webbrowser.open('file://' + os.path.realpath(FILENAME))
