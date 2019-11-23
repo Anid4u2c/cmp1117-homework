@@ -1,5 +1,7 @@
 import json
 
+from calendar import getDateTime
+
 FILENAME = ".config"
 KEY_MAP = {"firstName": "First Name", "lastName": "Last Name",
            "studentId": "Student ID", "dateTime": "Last Updated"}
