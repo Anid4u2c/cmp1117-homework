@@ -9,14 +9,6 @@ KEY_MAP = {"firstName": "First Name", "lastName": "Last Name",
 TEMPLATE = ("dateTime", "firstName", "lastName", "studentId")
 
 
-def configEdit(config):
-    response = input("\r\n\tWould you like to edit the current configuration (N = 'No', Y = 'Yes'):  ")
-    if response.upper() == "Y" and len(response) > 0:
-        return configSet(configOutput(userDataGet()))
-    else:
-        return config
-
-
 def configGet():
     print("\r\n\tChecking current folder for '.config' file...\r\n")
     try:
@@ -29,6 +21,12 @@ def configGet():
         config = configSet(userDataGet())
     return configEdit(configOutput(config))
 
+def configEdit(config):
+    response = input("\r\n\tWould you like to edit the current configuration (N = 'No', Y = 'Yes'):  ")
+    if response.upper() == "Y" and len(response) > 0:
+        return configSet(configOutput(userDataGet()))
+    else:
+        return config
 
 def configOutput(config):
     try:
@@ -46,14 +44,9 @@ def configOutput(config):
         else:
             return config
 
-
 def configSet(config):
     print("\r\n\tSetting or updating the user configuration for this program:\r\n")
     file = open(FILENAME, "w")
-    # config += "dateTime:  " + config["dateTime"] + "\n"
-    # config += "firstName:  " + config["firstName"] + "\n"
-    # config += "lastName:  " + config["lastName"] + "\n"
-    # config += "studentId:  " + config["studentId"] + "\n"
     file.write(json.dumps(config))
     file.close()
 
@@ -62,6 +55,7 @@ def configSet(config):
 
 def keyCheck(dictionary, template):
     try:
+        success = False
         for keys in dictionary.keys():
             if template.index(key) >= 0:
                 success = True
@@ -75,13 +69,18 @@ def keyCheck(dictionary, template):
 def main():
     config = configGet()
     today = getDate()
+    today = "2019-11-21"
     # print(config)
     print("\r\n\tGreat {}!  Today's date is {}...".format(config["firstName"], today))
     # webbrowser.open('file://' + os.path.realpath(FILENAME))
     scheduleData = getSchedule()
     dates = scheduleData["list"]
     courseData = scheduleData["dictionary"]
-    print(scheduleCheck(getDate(), dates))
+    if scheduleCheck(today, dates) == True:
+        assignment = courseData[testDate]
+        print("\r\n\tThere's an assignment today:  ")
+        for key in assignment.keys():
+    # print("\r\n\t\tkey:  ", key, ", value:  {}".format(assignment[key]))
 
 
 def mapKey(key):
