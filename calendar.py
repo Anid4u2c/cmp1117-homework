@@ -23,7 +23,7 @@ def getDateTime():
 
 
 def getSchedule():
-    with open('CMP1117 - Schedule.csv') as csv_file:
+    with open('schedule.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         line_count = 0
         dates = []
@@ -56,7 +56,7 @@ def getSchedule():
         # print(dates)
         # print(datesDictionary)
         # print(dates.index(getDate()))
-        return {"dates": dates, "dictionary": datesDictionary}
+        return {"list": dates, "dictionary": datesDictionary}
 
 
 def scheduleCheck(date=getDate(), dates=[]):
