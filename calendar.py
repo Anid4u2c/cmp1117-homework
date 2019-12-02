@@ -3,7 +3,7 @@ from datetime import datetime
 
 HEADERS = (
     "Date", "Week", "Class", "Day", "Learning Outcome", "Chapter", "Pages", "Quiz", "Assignmt", "Lab", "Outcomes")
-
+OPTIONS_DATE = {1: "Specify a specific date", 2: "Use today's date"}
 
 def getDate():
     # Determine current date and time of the device used.
@@ -11,6 +11,17 @@ def getDate():
 
     # Display date in the format
     return now.strftime('%Y-%m-%d')
+
+def getDateMANUAL():
+    print("\r\n\t\tHINT:  Use the due date of the assignment.")
+    year = input("\r\n\tEnter the year (YYYY):  ")
+    month = input("\r\n\tEnter the month (MM):  ")
+    day = input("\r\n\tEnter the day (DD):  ")
+    if len(day) != 2 or len(month) != 2 or len(year) != 4:
+        print("\r\n\t\tERROR:  Please enter the proper number of characters.")
+        getDateMANUAL()
+    else:
+        return "-".join([year, month, day])
 
 
 def getDateTime():
