@@ -1,6 +1,4 @@
 def printOptions(options):
-    if options is None:
-        options = OPTIONS
     print("\r\n\tHere are your options:")
     for key in options .keys():
         print("\t\t{} : {}".format(key, options [key]))
