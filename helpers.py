@@ -1,6 +1,6 @@
 def printOptions(options):
     print("\r\n\tHere are your options:")
-    for key in options .keys():
+    for key in options.keys():
         print("\t\t{} : {}".format(key, options [key]))
     try:
         return int(input("\r\n\tWhich option do you choose?  "))

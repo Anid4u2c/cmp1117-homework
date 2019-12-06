@@ -9,7 +9,7 @@ KEY_MAP = {"firstName": "First Name", "lastName": "Last Name",
 TEMPLATE = ("dateTime", "files", "firstName", "lastName", "studentId")
 
 def configEdit(config):
-    response = input("\r\n\tWould you like to edit the current configuration (N = 'No', Y = 'Yes'):  ")
+    response = input("\r\n\tWould you like to edit the current configuration ('Y' or 'Yes'):  ")
     if response.upper() == "Y" and len(response) > 0:
         return configSet(configOutput(userDataGet()))
     else:

@@ -6,36 +6,33 @@ from calendar import getDate, getDateMANUAL, OPTIONS_DATE
 from helpers import printOptions
 
 BASEPATH = "assignments"
-OPTIONS_FILE = {1: "homework", 2: "lab"}
+OPTIONS_FILE = {1: "homework", 2: "labs", 3: "case study", 4: "GO BACK"}
 
 def fileCreate(name, type):
     # detect the current working directory and print it
-    path = os.getcwd()
-    print("\r\n\tThe current working directory is %s" % path)
-    path += "/" + BASEPATH + "/" + type + "/" + name
+    pathStr = os.getcwd()
+    print("\r\n\tThe current working directory is %s" % pathStr)
+    pathStr = os.path.join(os.getcwd(), BASEPATH, type, name)
     try:
-        if not fileExists(name):
-            file = open(path, "x")
+        if path.exists(pathStr):
+            print("\r\n\tFile already exists!")
+        else:
+            file = open(pathStr, "w")
+    except FileNotFoundError:
+        print("\r\n\tFileNotFoundError:  Creation of the file '%s' failed" % name)
+        folderCreate(type)
+        fileCreate(name, type)
     except OSError:
-        print("\r\n\tERROR:  Creation of the file '%s' failed" % path)
-        path = os.getcwd() + "/" + BASEPATH + "/" + type
+        print("\r\n\tOSError:  Creation of the file '%s' failed" % name)
         folderCreate(type)
         fileCreate(name, type)
     else:
         print("\r\n\tSuccessfully created the file '%s' " % name)
 
-# SEE:  https://www.guru99.com/python-check-if-file-exists.html
-def fileExists(name):
-    exists = False
-    if path.isfile(name):
-        exists = path.exists(name)
-        print("file exist:" + str(exists))
-    return exists
-
 # SEE:  https://code-maven.com/listing-a-directory-using-python
 def filesList(dir):
     path = '.'
-    path = os.getcwd() + "/" + BASEPATH + "/" + dir + "/"
+    path = os.path.join(os.getcwd(), BASEPATH, dir)
 
     if len(sys.argv) == 2:
         path = sys.argv[1]
@@ -68,34 +65,31 @@ def fileNameGet(fileType):
     return "ch" + chapter + ".ex" + exercise + "." + dateString + ".py"
 
 def fileRename(oldName, newName):
-    if fileExists(oldName):
-        return
+    return
 
 # SEE:  https://stackabuse.com/creating-and-deleting-directories-with-python/
 def folderCreate(name):
-    # detect the current working directory and print it
-    path = os.getcwd()
-    print("\r\n\tThe current working directory is %s" % path)
-    path += "/" + BASEPATH + "/" + name
-    try:
-        if not folderExists(name):
-            os.mkdir(path)
-    except OSError:
-        print("\r\n\tERROR:  Creation of the directory %s failed" % path)
+    if path.exists(os.path.join(os.getcwd(), BASEPATH)):
+        print("\r\n\tCreating folder named:", name)
+        # detect the current working directory and print it
+        pathStr = os.getcwd()
+        print("\r\n\t\tIn the current working directory is %s" % pathStr)
+        pathStr = os.path.join(os.getcwd(), BASEPATH, name)
+        try:
+            if path.exists(pathStr):
+                print("\r\n\tFolder named '{}' already exists!".format(name))
+            else:
+                os.mkdir(pathStr)
+        except OSError:
+            print("\r\n\tOSError:  Creation of the directory %s failed" % pathStr)
+        else:
+            print("\r\n\tSuccessfully created the directory:  %s " % pathStr)
     else:
-        print("\r\n\tSuccessfully created the directory:  %s " % path)
+        print("\r\n\tCreating '{}' folder for the first time.".format(BASEPATH))
+        os.mkdir(os.path.join(os.getcwd(), BASEPATH))
+        folderCreate(name)
 
 def foldersCreate(folders):
     for folder in folders:
         folderCreate(folder)
-
-def folderExists(name):
-    exists = False
-    if path.isdir(name):
-        exists = path.exists(name)
-        print("\r\n\t\tDirectory '{}' exists:".format(name) + str(exists))
-    else:
-        print("\r\n\t\t'{}' is not a directory.".format(name))
-    return exists
-
 

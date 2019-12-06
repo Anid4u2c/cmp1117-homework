@@ -14,13 +14,15 @@ def actionGet(option):
         print("\t\tOkay, let's " + OPTIONS[option].lower() + "...")
         if option == 1:
             fileType = OPTIONS_FILE[printOptions(OPTIONS_FILE)]
-            fileNameOption = printOptions(OPTIONS_NAME)
-            if fileNameOption == 2:
-                fileName = input("\r\n\tWhat would you like to name your {} file?  ".format(fileType))
-                fileType += "s"
+            if fileType != "GO BACK":
+                fileNameOption = printOptions(OPTIONS_NAME)
+                if fileNameOption == 2:
+                    fileName = input("\r\n\tWhat would you like to name your {} file?  ".format(fileType))
+                else:
+                    fileName = fileNameGet(fileType)
+                fileCreate(fileName, fileType)
             else:
-                fileName = fileNameGet(fileType)
-            fileCreate(fileName, fileType)
+                actionGet(printOptions(OPTIONS))
         elif option == 2:
             for folder in ("homework", "labs"):
                 filesList(folder)
@@ -42,7 +44,7 @@ def assignmentsFilter(dateString, config):
             if key not in ["Date", "Week", "Class", "Day"]:
                 print("\t\t", key + ":  ", assignment[key])
         response = input("\r\n\tWould you like to create a file for this assignment ('N' = 'no', 'Y' = 'yes'):  ")
-        if response.upper() == "Y" and len(response) > 0:
+        if response.upper() in ["Y", "YES"] and len(response) > 0:
             print("\t\tOkay, we'll create a file named:  ch{}.".format(assignment["Chapter"].lower()))
     else:
         print("\r\n\tThere's no assignment today...")
