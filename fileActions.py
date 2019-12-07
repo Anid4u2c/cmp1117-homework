@@ -6,7 +6,8 @@ from calendar import getDate, getDateMANUAL, OPTIONS_DATE
 from helpers import printOptions
 
 BASEPATH = "assignments"
-OPTIONS_FILE = {1: "homework", 2: "labs", 3: "case study", 4: "GO BACK"}
+OPTIONS_FILE = {1: "homework", 2: "labs", 3: "case study"}
+SUBFOLDERS = tuple(OPTIONS_FILE.values())
 
 def fileCreate(name, type):
     # detect the current working directory and print it
@@ -30,23 +31,34 @@ def fileCreate(name, type):
         print("\r\n\tSuccessfully created the file '%s' " % name)
 
 # SEE:  https://code-maven.com/listing-a-directory-using-python
-def filesList(dir):
-    path = '.'
-    path = os.path.join(os.getcwd(), BASEPATH, dir)
+def filesList(directories):
+    filesByFolder = {}
+    pathStr = '.'
+    for directory in directories:
+        pathStr = os.path.join(os.getcwd(), BASEPATH, directory)
 
-    if len(sys.argv) == 2:
-        path = sys.argv[1]
+        if len(sys.argv) == 2:
+            pathStr = sys.argv[1]
 
-    files = os.listdir(path)
-    if len(files) > 0:
-        print("\t\tDIRECTORY:  " + dir)
-        for name in files:
-            print("\t\t\t" + name)
-    #except FileNotFoundError:
-    return
+        try:
+            print("\n\tTrying to list the directory:  '{}'".format(directory))
+            filesByFolder[directory] = []
+            files = os.listdir(pathStr)
+            if len(files) > 0:
+                print("\t\tDIRECTORY:  " + directory)
+                for name in files:
+                    print("\t\t\t" + name)
+                    filesByFolder[directory].append(name)
+            else:
+                print("\n\t\tThe directory:  '{}' contains 0 files".format(directory))
+        except FileNotFoundError:
+            print("\n\t\tThe directory:  '{}' does NOT exist...".format(directory))
+            folderCreate(directory)
+    return filesByFolder
 
 def fileNameGet(fileType):
     try:
+        fileType = OPTIONS_FILE[fileType]
         chapter = int(input("\r\n\tWhat chapter is the {} file for?  ".format(fileType)))
         exercise = int(input("\r\n\tWhat exercise is the {} file for?  ".format(fileType)))
         dateOption = printOptions(OPTIONS_DATE)
