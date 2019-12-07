@@ -9,43 +9,43 @@ KEY_MAP = {"firstName": "First Name", "lastName": "Last Name",
 TEMPLATE = ("dateTime", "files", "firstName", "lastName", "studentId")
 
 def configEdit(config):
-    response = input("\r\n\tWould you like to edit the current configuration ('Y' or 'Yes'):  ")
+    response = input("\n\tWould you like to edit the current configuration ('Y' or 'Yes'):  ")
     if response.upper() == "Y" and len(response) > 0:
         return configSet(configOutput(userDataGet()))
     else:
         return config
 
 def configGet():
-    print("\r\n\tChecking current folder for '.config' file...\r\n")
+    print("\n\tChecking current folder for '.config' file...")
     try:
         configFile = open(FILENAME, "r")
         config = json.loads(configFile.read())
-        print("\r\n\t\tConfiguration file found.\r\n")
+        print("\n\t\tConfiguration file found.")
         configFile.close()
     except IOError:
-        print("\r\n\t\tNo configuration file found.\r\n")
+        print("\n\t\tNo configuration file found.")
         config = configSet(userDataGet())
     return configEdit(configOutput(config))
 
 
 def configOutput(config):
     try:
-        output = "\r\n\tHere is the current configuration for this program:\r\n"
+        output = "\n\tHere is the current configuration for this program:\n"
         for key in config.keys():
             if key not in ["dateTime", "files"]:
-                output += "\r\n\t{}:  {}".format(mapKey(key), config[key])
+                output += "\n\t{}:  {}".format(mapKey(key), config[key])
         return config
     except AttributeError:
         isConfigGood = keyCheck(config, TEMPLATE)
         if isConfigGood == False:
-            print("\r\n\tThe file does not contain the proper configuration...")
-            print("\r\n\tisConfigGood:  ", isConfigGood)
+            print("\n\tThe file does not contain the proper configuration...")
+            print("\n\tisConfigGood:  ", isConfigGood)
             return userDataGet()
         else:
             return config
 
 def configSet(config):
-    print("\r\n\tSetting or updating the user configuration for this program:\r\n")
+    print("\n\tSetting or updating the user configuration for this program:\n")
     file = open(FILENAME, "w")
     file.write(json.dumps(config))
     file.close()
@@ -71,8 +71,8 @@ def mapKey(key):
     return value
 
 def userDataGet():
-    firstName = input('\r\n\tEnter your first name: ')
-    lastName = input('\r\n\tEnter your last name: ')
-    studentId = input('\r\n\tEnter your student ID: ')
+    firstName = input('\n\tEnter your first name: ')
+    lastName = input('\n\tEnter your last name: ')
+    studentId = input('\n\tEnter your student ID: ')
     config = {"dateTime": getDateTime(), "firstName": firstName, "lastName": lastName, "studentId": studentId}
     return config

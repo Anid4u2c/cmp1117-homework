@@ -1,6 +1,6 @@
 from calendar import getDate, getSchedule, scheduleCheck
 from config import configGet
-from fileActions import fileCreate, fileNameGet, OPTIONS_FILE, SUBFOLDERS
+from fileActions import fileCreate, fileNameGet, filesList, OPTIONS_FILE, SUBFOLDERS
 from helpers import addOption, printOptions
 
 OPTIONS_NAME = {1: "Allow the application to name the file for you.", 2: "Specify a name for your file."}
@@ -17,7 +17,7 @@ def actionGet(options):
                 while fileNameOption != len(OPTIONS_NAME.keys()):
                     if fileNameOption == 2:
                         fileType = OPTIONS_FILE[fileType]
-                        fileName = input("\r\n\tWhat would you like to name your {} file?  ".format(fileType))
+                        fileName = input("\n\tWhat would you like to name your {} file?  ".format(fileType))
                     else:
                         fileName = fileNameGet(fileType)
                     fileCreate(fileName, fileType)
@@ -29,15 +29,18 @@ def actionGet(options):
             actionGet(printOptions(OPTIONS))
         elif option == 3:
             filesByFolder = filesList(SUBFOLDERS)
-            filesList = []
+            for folder in filesByFolder.keys():
+                printOptions(buildChoicesForFiles(filesByFolder))
+            '''
             for folder, files in filesByFolder.items():
                 print("\n\t\t You have {} files in the directory '{}'".format(folder, len(files)))
                 if len(files) > 0:
                     for file in files:
-                        filesList.append(os.path.join(folder, file))
+                        listOfFiles.append(path.join(folder, file))
                 else:
                     print("\n\t\t You have 0 files in all directories, try creating some files first.")
-    print("\n\t\tOkay, let's " + OPTIONS[option].lower() + "...")
+            '''
+        #print("\n\t\tOkay, let's " + OPTIONS[option].lower() + "...")
 
 def assignmentsFilter(dateString, config):
     today = dateString
@@ -46,24 +49,45 @@ def assignmentsFilter(dateString, config):
     courseData = scheduleData["dictionary"]
     if scheduleCheck(today, dates):
         assignment = courseData[today]
-        print("\r\n\tThere's an assignment today:  ")
+        print("\n\tThere's an assignment today:  ")
         print("\t\tFor {}, in week {}".format(today, assignment["Week"]))
         for key in sorted(assignment.keys()):
             if key not in ["Date", "Week", "Class", "Day"]:
                 print("\t\t", key + ":  ", assignment[key])
-        response = input("\r\n\tWould you like to create a file for this assignment ('N' = 'no', 'Y' = 'yes'):  ")
+        response = input("\n\tWould you like to create a file for this assignment ('N' = 'no', 'Y' = 'yes'):  ")
         if response.upper() in ["Y", "YES"] and len(response) > 0:
             print("\t\tOkay, we'll create a file named:  ch{}.".format(assignment["Chapter"].lower()))
     else:
-        print("\r\n\tThere's no assignment today...")
+        print("\n\t\tThere are no assignment today.")
     actionGet(addOption(OPTIONS, "QUIT"))
+
+def buildChoicesForFiles(listOfFiles):
+    choices = {}
+    folderChoices = {}
+    folderIndex = 1
+    for folder, files in listOfFiles.items():
+        if len(files) > 0
+            folderChoices[folderIndex] = folder
+            fileChoices = {}
+            fileIndex = 1
+            for file in files:
+                fileChoices[fileIndex] = file
+            choices[folderIndex] = fileChoices
+        folderIndex += 1
+    if len(folderChoices.keys()) == 1:
+        print("\n\tThe only directory that has files is: ", folderChoices[1])
+        printOptions(choices[1])
+    else:
+        print()
+
+    return choices
 
 def main():
     config = configGet()
     # webbrowser.open('file://' + os.path.realpath(FILENAME))
     today = getDate()
     # today = "2019-11-21"
-    print("\r\n\tGreat {}!  Today's date is {}...".format(config["firstName"], today))
+    print("\n\tGreat {}!  Today's date is {}.".format(config["firstName"], today))
     assignmentsFilter(today, config)
 
 

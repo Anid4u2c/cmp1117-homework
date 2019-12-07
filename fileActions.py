@@ -12,23 +12,23 @@ SUBFOLDERS = tuple(OPTIONS_FILE.values())
 def fileCreate(name, type):
     # detect the current working directory and print it
     pathStr = os.getcwd()
-    print("\r\n\tThe current working directory is %s" % pathStr)
+    print("\n\tThe current working directory is %s" % pathStr)
     pathStr = os.path.join(os.getcwd(), BASEPATH, type, name)
     try:
         if path.exists(pathStr):
-            print("\r\n\tFile already exists!")
+            print("\n\tFile already exists!")
         else:
             file = open(pathStr, "w")
     except FileNotFoundError:
-        print("\r\n\tFileNotFoundError:  Creation of the file '%s' failed" % name)
+        print("\n\tFileNotFoundError:  Creation of the file '%s' failed" % name)
         folderCreate(type)
         fileCreate(name, type)
     except OSError:
-        print("\r\n\tOSError:  Creation of the file '%s' failed" % name)
+        print("\n\tOSError:  Creation of the file '%s' failed" % name)
         folderCreate(type)
         fileCreate(name, type)
     else:
-        print("\r\n\tSuccessfully created the file '%s' " % name)
+        print("\n\tSuccessfully created the file '%s' " % name)
 
 # SEE:  https://code-maven.com/listing-a-directory-using-python
 def filesList(directories):
@@ -41,26 +41,28 @@ def filesList(directories):
             pathStr = sys.argv[1]
 
         try:
-            print("\n\tTrying to list the directory:  '{}'".format(directory))
+            # print("\n\tTrying to list the directory:  '{}'".format(directory))
             filesByFolder[directory] = []
             files = os.listdir(pathStr)
             if len(files) > 0:
-                print("\t\tDIRECTORY:  " + directory)
+                filesStr = ""
                 for name in files:
-                    print("\t\t\t" + name)
+                    filesStr += "\t\t\tFILE:  " + name
                     filesByFolder[directory].append(name)
+                print("\n\t\tDIRECTORY: ", directory, "has", len(filesByFolder[directory]), "files:")
+                print(filesStr)
             else:
-                print("\n\t\tThe directory:  '{}' contains 0 files".format(directory))
+                print("\n\t\tDIRECTORY:  '{}' contains 0 files".format(directory))
         except FileNotFoundError:
-            print("\n\t\tThe directory:  '{}' does NOT exist...".format(directory))
+            # print("\n\t\tThe directory:  '{}' does NOT exist...".format(directory))
             folderCreate(directory)
     return filesByFolder
 
 def fileNameGet(fileType):
     try:
         fileType = OPTIONS_FILE[fileType]
-        chapter = int(input("\r\n\tWhat chapter is the {} file for?  ".format(fileType)))
-        exercise = int(input("\r\n\tWhat exercise is the {} file for?  ".format(fileType)))
+        chapter = int(input("\n\tWhat chapter is the {} file for?  ".format(fileType)))
+        exercise = int(input("\n\tWhat exercise is the {} file for?  ".format(fileType)))
         dateOption = printOptions(OPTIONS_DATE)
         if dateOption == 1:
             dateString = getDateMANUAL()
@@ -69,10 +71,10 @@ def fileNameGet(fileType):
         chapter = str(chapter).zfill(2)
         exercise = str(exercise).zfill(2)
         if chapter == "00" or exercise == "00":
-            print("\r\n\t\tERROR:  Please enter the proper information.")
+            print("\n\t\tERROR:  Please enter the proper information.")
             fileNameGet(fileType)
     except ValueError:
-        print("\r\n\t\tERROR:  Please enter a number for the Chapter and Excercise.")
+        print("\n\t\tERROR:  Please enter a number for the Chapter and Excercise.")
         fileNameGet(fileType)
     return "ch" + chapter + ".ex" + exercise + "." + dateString + ".py"
 
@@ -82,22 +84,22 @@ def fileRename(oldName, newName):
 # SEE:  https://stackabuse.com/creating-and-deleting-directories-with-python/
 def folderCreate(name):
     if path.exists(os.path.join(os.getcwd(), BASEPATH)):
-        print("\r\n\tCreating folder named:", name)
+        print("\n\tCreating folder named:", name)
         # detect the current working directory and print it
         pathStr = os.getcwd()
-        print("\r\n\t\tIn the current working directory is %s" % pathStr)
+        print("\n\t\tIn the current working directory is %s" % pathStr)
         pathStr = os.path.join(os.getcwd(), BASEPATH, name)
         try:
             if path.exists(pathStr):
-                print("\r\n\tFolder named '{}' already exists!".format(name))
+                print("\n\tFolder named '{}' already exists!".format(name))
             else:
                 os.mkdir(pathStr)
         except OSError:
-            print("\r\n\tOSError:  Creation of the directory %s failed" % pathStr)
+            print("\n\tOSError:  Creation of the directory %s failed" % pathStr)
         else:
-            print("\r\n\tSuccessfully created the directory:  %s " % pathStr)
+            print("\n\tSuccessfully created the directory:  %s " % pathStr)
     else:
-        print("\r\n\tCreating '{}' folder for the first time.".format(BASEPATH))
+        print("\n\tCreating '{}' folder for the first time.".format(BASEPATH))
         os.mkdir(os.path.join(os.getcwd(), BASEPATH))
         folderCreate(name)
 
