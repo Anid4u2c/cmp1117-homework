@@ -1,35 +1,43 @@
 from calendar import getDate, getSchedule, scheduleCheck
 from config import configGet
-from fileActions import fileCreate, filesList, fileNameGet, fileRename, OPTIONS_FILE
-from helpers import printOptions
+from fileActions import fileCreate, fileNameGet, OPTIONS_FILE, SUBFOLDERS
+from helpers import addOption, printOptions
 
-OPTIONS_NAME = {1: "Allow the application to name the file for you.", 2: "Specify a name for your file.", 3: "GO BACK"}
-OPTIONS = {1: "Create a file for an assignment", 2: "List all assignment files", 3: "Rename a assignment file",
-           4: "QUIT"}
+OPTIONS_NAME = {1: "Allow the application to name the file for you.", 2: "Specify a name for your file."}
+OPTIONS = {1: "Create a file for an assignment", 2: "List all assignment files", 3: "Rename a assignment file"}
 
-def actionGet(option):
-    if option is None:
-        option = ""
-    if option in OPTIONS.keys():
-        print("\t\tOkay, let's " + OPTIONS[option].lower() + "...")
+def actionGet(options):
+    option = printOptions(options)
+    while option != len(OPTIONS.keys()):
+        print("\n\t\tOkay, let's " + OPTIONS[option].lower() + "...")
         if option == 1:
-            fileType = OPTIONS_FILE[printOptions(OPTIONS_FILE)]
-            if fileType != "GO BACK":
-                fileNameOption = printOptions(OPTIONS_NAME)
-                if fileNameOption == 2:
-                    fileName = input("\r\n\tWhat would you like to name your {} file?  ".format(fileType))
-                else:
-                    fileName = fileNameGet(fileType)
-                fileCreate(fileName, fileType)
-            else:
-                actionGet(printOptions(OPTIONS))
+            fileType = printOptions(addOption(OPTIONS_FILE, "GO BACK"))
+            while fileType != len(OPTIONS_FILE.keys()):
+                fileNameOption = printOptions(addOption(OPTIONS_NAME, "GO BACK"))
+                while fileNameOption != len(OPTIONS_NAME.keys()):
+                    if fileNameOption == 2:
+                        fileType = OPTIONS_FILE[fileType]
+                        fileName = input("\r\n\tWhat would you like to name your {} file?  ".format(fileType))
+                    else:
+                        fileName = fileNameGet(fileType)
+                    fileCreate(fileName, fileType)
+                fileType = len(OPTIONS_FILE)
+            actionGet(options)
         elif option == 2:
-            for folder in ("homework", "labs"):
-                filesList(folder)
+            filesList(SUBFOLDERS)
+            print("\n\t\tFinished " + OPTIONS[option].lower() + ".")
+            actionGet(printOptions(OPTIONS))
         elif option == 3:
-            fileRename()
-        else:
-            quit()
+            filesByFolder = filesList(SUBFOLDERS)
+            filesList = []
+            for folder, files in filesByFolder.items():
+                print("\n\t\t You have {} files in the directory '{}'".format(folder, len(files)))
+                if len(files) > 0:
+                    for file in files:
+                        filesList.append(os.path.join(folder, file))
+                else:
+                    print("\n\t\t You have 0 files in all directories, try creating some files first.")
+    print("\n\t\tOkay, let's " + OPTIONS[option].lower() + "...")
 
 def assignmentsFilter(dateString, config):
     today = dateString
@@ -48,7 +56,7 @@ def assignmentsFilter(dateString, config):
             print("\t\tOkay, we'll create a file named:  ch{}.".format(assignment["Chapter"].lower()))
     else:
         print("\r\n\tThere's no assignment today...")
-    actionGet(printOptions(OPTIONS))
+    actionGet(addOption(OPTIONS, "QUIT"))
 
 def main():
     config = configGet()
