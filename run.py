@@ -24,7 +24,7 @@ def actionGet(options):
             actionGet(options)
         elif option == 2:
             filesList(SUBFOLDERS)
-            print("\n\t\tFinished " + OPTIONS[option].lower() + ".")
+            print("\n\t\tFinished " + fileType.lower() + ".")
             actionGet(options)
         elif option == 3:
             filesByFolder = filesList(SUBFOLDERS)
