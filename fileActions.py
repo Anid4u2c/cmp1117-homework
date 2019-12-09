@@ -11,12 +11,14 @@ SUBFOLDERS = tuple(OPTIONS_FILE.values())
 
 def fileCreate(name, type):
     # detect the current working directory and print it
+    fileExists = False
     pathStr = os.getcwd()
     print("\n\tThe current working directory is %s" % pathStr)
     pathStr = os.path.join(os.getcwd(), BASEPATH, type, name)
     try:
         if path.exists(pathStr):
-            print("\n\tFile already exists!")
+            fileExists = True
+            print("\n\t\tATTENTION:  File already exists!")
         else:
             file = open(pathStr, "w")
     except FileNotFoundError:
@@ -28,7 +30,8 @@ def fileCreate(name, type):
         folderCreate(type)
         fileCreate(name, type)
     else:
-        print("\n\tSUCCESS:  Created the file '%s' " % name)
+        if fileExists == False:
+            print("\n\t\tSUCCESS:  Created the file '%s' " % name)
 
 # SEE:  https://code-maven.com/listing-a-directory-using-python
 def filesList(directories):
@@ -60,7 +63,8 @@ def filesList(directories):
 
 def fileNameGet(fileType):
     try:
-        fileType = OPTIONS_FILE[fileType]
+        if type(fileType) == 'int' and fileType in OPTIONS_FILE.keys():
+            fileType = OPTIONS_FILE[fileType]
         chapter = int(input("\n\tWhat chapter is the {} file for?  ".format(fileType)))
         exercise = int(input("\n\tWhat exercise is the {} file for?  ".format(fileType)))
         dateOption = printOptions(OPTIONS_DATE)
@@ -78,7 +82,7 @@ def fileNameGet(fileType):
         fileNameGet(fileType)
     return "ch" + chapter + ".ex" + exercise + "." + dateString + ".py"
 
-def fileRename(oldName, type):
+def fileRename(oldName, newName, type):
     # detect the current working directory and print it
     pathStr = os.getcwd()
     print("\n\tThe current working directory is %s" % pathStr)
@@ -89,13 +93,13 @@ def fileRename(oldName, type):
             print("\n\tFile with proposed name '{}', already exists!".format(newName))
         else:
             # SEE: https://www.tutorialspoint.com/python3/os_rename.htm
-            os.rename(newPathStr, oldPathStr)
+            os.rename(oldPathStr, newPathStr)
     except FileNotFoundError:
-        print("\n\tFileNotFoundError:  Renaming of the file '%s' failed" % newName)
+        print("\n\tFileNotFoundError:  Renaming of the file '%s' failed" % oldName)
     except OSError:
-        print("\n\tOSError:  Renaming of the file '%s' failed" % newName)
+        print("\n\tOSError:  Renaming of the file '%s' failed" % oldName)
     else:
-        print("\n\tSUCCESS:  Renaming the file '%s' " % newName)
+        print("\n\tSUCCESS:  Renamed the '{}' file from '{}' to '{}'".format(type, oldName, newName))
 
 # SEE:  https://stackabuse.com/creating-and-deleting-directories-with-python/
 def folderCreate(name):

@@ -34,14 +34,18 @@ def actionGet(options):
                     for key, fileOpts in renamingOpts.items():
                         fileType = OPTIONS_FILE[key]
                         print("\n\tPick which '{}' file to rename:".format(fileType))
-                        oldName = fileOpts[printOptions(fileOpts)]
-                        fileNameOption = printOptions(addOption(OPTIONS_NAME, "GO BACK"))
-                        while fileNameOption != len(OPTIONS_NAME.keys()):
-                            if fileNameOption == 2:
-                                newName = input("\n\tWhat would you like to rename your {} file?  ".format(fileType))
-                            else:
-                                newName = fileNameGet(fileType)
-                        fileRename(oldName, newName, fileType)
+                        oldName = fileOpts[printOptions(addOption(fileOpts, "GO BACK"))]
+                        while oldName != "GO BACK":
+                            fileNameOption = printOptions(addOption(OPTIONS_NAME, "GO BACK"))
+                            while fileNameOption != len(OPTIONS_NAME.keys()):
+                                if fileNameOption == 2:
+                                    newName = input("\n\tWhat would you like to rename your {} file?  ".format(fileType))
+                                else:
+                                    newName = fileNameGet(fileType)
+                                fileRename(oldName, newName, fileType)
+                                fileNameOption = len(OPTIONS_NAME.keys())
+                            oldName = "GO BACK"
+                    actionGet(options)
                         #printOptions(addOption(renamingOpts, "GO BACK"))
                 else:
                     print("\n\t\tNo files to rename in directory:  {}".format(folder))
@@ -50,19 +54,43 @@ def actionGet(options):
 
 def assignmentsFilter(dateString, config):
     today = dateString
+    today = "2019-11-21"
     scheduleData = getSchedule()
     dates = scheduleData["list"]
     courseData = scheduleData["dictionary"]
     if scheduleCheck(today, dates):
         assignment = courseData[today]
         print("\n\tThere's an assignment today:  ")
-        print("\t\tFor {}, in week {}".format(today, assignment["Week"]))
+        print("\t\tToday ({}), in week {}".format(today, assignment["Week"]))
+        assignmentOpts = {}
+        assignmentMap = {}
+        index = 1
         for key in sorted(assignment.keys()):
             if key not in ["Date", "Week", "Class", "Day"]:
                 print("\t\t", key + ":  ", assignment[key])
-        response = input("\n\tWould you like to create a file for this assignment ('N' = 'no', 'Y' = 'yes'):  ")
-        if response.upper() in ["Y", "YES"] and len(response) > 0:
-            print("\t\tOkay, we'll create a file named:  ch{}.".format(assignment["Chapter"].lower()))
+            if key in ["Lab", "Homework"]:
+                assignmentMap[index] = key
+                assignmentOpts[index] = assignment[key]
+                index += 1
+        for key, value in assignmentOpts.items():
+            fileType = assignmentMap[key].lower()
+            response = input("\n\tWould you like to create a file for today's "
+                             "'{}' assignment ('Y' = 'Yes'):  ".format(fileType))
+            if response.upper() in ["Y", "YES"] and len(response) > 0:
+                fileNameOption = printOptions(
+                    addOption(OPTIONS_NAME, "GO BACK"))
+                while fileNameOption != len(OPTIONS_NAME.keys()):
+                    if fileNameOption == 2:
+                        fileName = input(
+                            "\n\tWhat would you like to name your {} "
+                            "file?  ".format(
+                                OPTIONS_FILE[fileType]))
+                    else:
+                        if fileType == "lab":
+                            fileTypeName = assignment["Lab"].lower()
+                        fileName = "ch{}.{}.{}.py".format(assignment["Chapter"], fileTypeName, today)
+                    fileCreate(fileName, fileType)
+                    fileNameOption = len(OPTIONS_NAME.keys())
     else:
         print("\n\t\tThere are no assignment today.")
     actionGet(addOption(OPTIONS, "QUIT"))
