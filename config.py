@@ -9,21 +9,21 @@ KEY_MAP = {"firstName": "First Name", "lastName": "Last Name",
 TEMPLATE = ("dateTime", "files", "firstName", "lastName", "studentId")
 
 def configEdit(config):
-    response = input("\n\tWould you like to edit the current configuration ('Y' or 'Yes'):  ")
+    response = input("\n Would you like to edit the current configuration ('Y' or 'Yes'):  ")
     if response.upper() == "Y" and len(response) > 0:
         return configSet(configOutput(userDataGet()))
     else:
         return config
 
 def configGet():
-    print("\n\tChecking current folder for '.config' file...")
+    print("\n Checking current folder for '.config' file...")
     try:
         configFile = open(FILENAME, "r")
         config = json.loads(configFile.read())
-        print("\n\t\tConfiguration file found.")
+        print("\n\tConfiguration file found.")
         configFile.close()
     except IOError:
-        print("\n\t\tNo configuration file found.")
+        print("\n\tNo configuration file found.")
         config = configSet(userDataGet())
     return configEdit(configOutput(config))
 

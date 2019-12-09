@@ -1,6 +1,6 @@
 from calendar import getDate, getSchedule, scheduleCheck
 from config import configGet
-from fileActions import fileCreate, fileNameGet, filesList, OPTIONS_FILE, SUBFOLDERS
+from fileActions import fileCreate, fileNameGet, fileRename, filesList, OPTIONS_FILE, SUBFOLDERS
 from helpers import addOption, printOptions
 
 OPTIONS_NAME = {1: "Allow the application to name the file for you.", 2: "Specify a name for your file."}
@@ -9,37 +9,43 @@ OPTIONS = {1: "Create a file for an assignment", 2: "List all assignment files",
 def actionGet(options):
     option = printOptions(options)
     while option != len(OPTIONS.keys()):
-        print("\n\t\tOkay, let's " + OPTIONS[option].lower() + "...")
+        print("\n\t Okay, let's " + OPTIONS[option].lower() + "...")
         if option == 1:
             fileType = printOptions(addOption(OPTIONS_FILE, "GO BACK"))
             while fileType != len(OPTIONS_FILE.keys()):
                 fileNameOption = printOptions(addOption(OPTIONS_NAME, "GO BACK"))
                 while fileNameOption != len(OPTIONS_NAME.keys()):
                     if fileNameOption == 2:
-                        fileType = OPTIONS_FILE[fileType]
-                        fileName = input("\n\tWhat would you like to name your {} file?  ".format(fileType))
+                        fileName = input("\n\tWhat would you like to name your {} file?  ".format(OPTIONS_FILE[fileType]))
                     else:
-                        fileName = fileNameGet(fileType)
+                        fileName = fileNameGet(OPTIONS_FILE[fileType])
                     fileCreate(fileName, fileType)
                 fileType = len(OPTIONS_FILE)
             actionGet(options)
         elif option == 2:
             filesList(SUBFOLDERS)
             print("\n\t\tFinished " + OPTIONS[option].lower() + ".")
-            actionGet(printOptions(OPTIONS))
+            actionGet(options)
         elif option == 3:
             filesByFolder = filesList(SUBFOLDERS)
-            for folder in filesByFolder.keys():
-                printOptions(buildChoicesForFiles(filesByFolder))
-            '''
             for folder, files in filesByFolder.items():
-                print("\n\t\t You have {} files in the directory '{}'".format(folder, len(files)))
-                if len(files) > 0:
-                    for file in files:
-                        listOfFiles.append(path.join(folder, file))
+                renamingOpts = buildChoicesForFiles({folder:files})
+                if len(renamingOpts.keys()) >= 1:
+                    for key, fileOpts in renamingOpts.items():
+                        fileType = OPTIONS_FILE[key]
+                        print("\n\tPick which '{}' file to rename:".format(fileType))
+                        oldName = fileOpts[printOptions(fileOpts)]
+                        fileNameOption = printOptions(addOption(OPTIONS_NAME, "GO BACK"))
+                        while fileNameOption != len(OPTIONS_NAME.keys()):
+                            if fileNameOption == 2:
+                                newName = input("\n\tWhat would you like to rename your {} file?  ".format(fileType))
+                            else:
+                                newName = fileNameGet(fileType)
+                        fileRename(oldName, newName, fileType)
+                        #printOptions(addOption(renamingOpts, "GO BACK"))
                 else:
-                    print("\n\t\t You have 0 files in all directories, try creating some files first.")
-            '''
+                    print("\n\t\tNo files to rename in directory:  {}".format(folder))
+            actionGet(options)
         #print("\n\t\tOkay, let's " + OPTIONS[option].lower() + "...")
 
 def assignmentsFilter(dateString, config):
@@ -66,20 +72,14 @@ def buildChoicesForFiles(listOfFiles):
     folderChoices = {}
     folderIndex = 1
     for folder, files in listOfFiles.items():
-        if len(files) > 0
+        fileChoices = {}
+        if len(files) > 0:
             folderChoices[folderIndex] = folder
-            fileChoices = {}
             fileIndex = 1
             for file in files:
                 fileChoices[fileIndex] = file
-            choices[folderIndex] = fileChoices
+        choices[folderIndex] = fileChoices
         folderIndex += 1
-    if len(folderChoices.keys()) == 1:
-        print("\n\tThe only directory that has files is: ", folderChoices[1])
-        printOptions(choices[1])
-    else:
-        print()
-
     return choices
 
 def main():
@@ -87,8 +87,7 @@ def main():
     # webbrowser.open('file://' + os.path.realpath(FILENAME))
     today = getDate()
     # today = "2019-11-21"
-    print("\n\tGreat {}!  Today's date is {}.".format(config["firstName"], today))
+    print("\n Great {}!  Today's date is {}.".format(config["firstName"], today))
     assignmentsFilter(today, config)
-
 
 main()
