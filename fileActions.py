@@ -16,6 +16,7 @@ def fileCreate(name, fileType):
     # detect the current working directory and print it
     pathStr = os.getcwd()
     print("\n\tThe current working directory is %s" % pathStr)
+    print("fileType:  ", fileType)
     pathStr = os.path.join(os.getcwd(), BASEPATH, fileType, name)
     try:
         if path.exists(pathStr):
