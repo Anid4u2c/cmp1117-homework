@@ -16,10 +16,10 @@ def actionGet(options):
                 fileNameOption = printOptions(addOption(OPTIONS_NAME, "GO BACK"))
                 while fileNameOption != len(OPTIONS_NAME.keys()):
                     if fileNameOption == 2:
-                        fileName = input("\n\tWhat would you like to name your {} file?  ".format(fileType))
+                        fileName = input("\n\tWhat would you like to name your '{}' file?  ".format(OPTIONS_FILE[fileType]))
                     else:
-                        fileName = fileNameGet(fileType)
-                    fileCreate(fileName, fileType)
+                        fileName = fileNameGet(OPTIONS_FILE[fileType])
+                    fileCreate(fileName, OPTIONS_FILE[fileType])
                 fileType = len(OPTIONS_FILE)
             actionGet(options)
         elif option == 2:
