@@ -10,7 +10,7 @@ OPTIONS_FILE = {1: "homework", 2: "labs", 3: "case study"}
 SUBFOLDERS = tuple(OPTIONS_FILE.values())
 
 def fileCreate(name, type):
-    if type(fileType) == 'int' and fileType in OPTIONS_FILE.keys():
+    if type(type) == 'int' and type in OPTIONS_FILE.keys():
         type = OPTIONS_FILE[type]
     fileExists = False
     # detect the current working directory and print it
