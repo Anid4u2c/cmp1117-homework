@@ -11,16 +11,18 @@ def actionGet(options):
     while option != len(OPTIONS.keys()):
         print("\n\t Okay, let's " + OPTIONS[option].lower() + "...")
         if option == 1:
-            fileType = printOptions(addOption(OPTIONS_FILE, "GO BACK"))
-            while fileType != len(OPTIONS_FILE.keys()):
+            fileInt = printOptions(addOption(OPTIONS_FILE, "GO BACK"))
+            fileType = OPTIONS_FILE[fileInt]
+            while fileInt != len(OPTIONS_FILE.keys()):
                 fileNameOption = printOptions(addOption(OPTIONS_NAME, "GO BACK"))
                 while fileNameOption != len(OPTIONS_NAME.keys()):
                     if fileNameOption == 2:
-                        fileName = input("\n\tWhat would you like to name your '{}' file?  ".format(OPTIONS_FILE[fileType]))
+                        fileName = input("\n\tWhat would you like to name your '{}' file?  ".format(fileType))
                     else:
-                        fileName = fileNameGet(OPTIONS_FILE[fileType])
-                    fileCreate(fileName, OPTIONS_FILE[fileType])
-                fileType = len(OPTIONS_FILE)
+                        fileName = fileNameGet(fileType)
+                    fileCreate(fileName, fileType)
+                    fileNameOption = len(OPTIONS_NAME.keys())
+                fileInt = len(OPTIONS_FILE)
             actionGet(options)
         elif option == 2:
             filesList(SUBFOLDERS)
