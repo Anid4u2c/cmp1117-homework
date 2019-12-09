@@ -16,9 +16,9 @@ def actionGet(options):
                 fileNameOption = printOptions(addOption(OPTIONS_NAME, "GO BACK"))
                 while fileNameOption != len(OPTIONS_NAME.keys()):
                     if fileNameOption == 2:
-                        fileName = input("\n\tWhat would you like to name your {} file?  ".format(OPTIONS_FILE[fileType]))
+                        fileName = input("\n\tWhat would you like to name your {} file?  ".format(fileType))
                     else:
-                        fileName = fileNameGet(OPTIONS_FILE[fileType])
+                        fileName = fileNameGet(fileType)
                     fileCreate(fileName, fileType)
                 fileType = len(OPTIONS_FILE)
             actionGet(options)
@@ -60,8 +60,7 @@ def assignmentsFilter(dateString, config):
     courseData = scheduleData["dictionary"]
     if scheduleCheck(today, dates):
         assignment = courseData[today]
-        print("\n\tThere's an assignment today:  ")
-        print("\t\tToday ({}), in week {}".format(today, assignment["Week"]))
+        print("\n\tThere's an assignment on {}, in week {}".format(today,assignment["Week"]))
         assignmentOpts = {}
         assignmentMap = {}
         index = 1
@@ -83,11 +82,14 @@ def assignmentsFilter(dateString, config):
                     if fileNameOption == 2:
                         fileName = input(
                             "\n\tWhat would you like to name your {} "
-                            "file?  ".format(
-                                OPTIONS_FILE[fileType]))
+                            "file?  ".format(fileType))
                     else:
                         if fileType == "lab":
                             fileTypeName = assignment["Lab"].lower()
+                        elif fileType == "Homework":
+                            fileTypeName = assignment["Homework"].lower()
+                        else:
+                            fileTypeName = "assignment"
                         fileName = "ch{}.{}.{}.py".format(assignment["Chapter"], fileTypeName, today)
                     fileCreate(fileName, fileType)
                     fileNameOption = len(OPTIONS_NAME.keys())
