@@ -2,14 +2,13 @@ import csv
 from datetime import datetime
 
 SCHEDULE = 'schedule.csv'
-HEADERS = (
-    "Date", "Week", "Class", "Day", "Learning Outcome", "Chapter", "Pages", "Quiz", "Assignmt", "Lab", "Outcomes")
+HEADERS = ("Date", "Week", "Class", "Day", "Learning Outcome", "Chapter",
+           "Pages", "Quiz", "Assignmt", "Lab", "Outcomes")
 OPTIONS_DATE = {1: "Specify a specific date", 2: "Use today's date"}
 
 def getDate():
     # Determine current date and time of the device used.
     now = datetime.now()
-
     # Display date in the format
     return now.strftime('%Y-%m-%d')
 
@@ -28,7 +27,6 @@ def getDateMANUAL():
 def getDateTime():
     # Determine current date and time of the device used.
     now = datetime.now()
-
     # Display date and time in the format: YYYY-MM-DD H:M:S
     dateTime = now.strftime('%Y-%m-%d %H:%M:%S')
     return dateTime
