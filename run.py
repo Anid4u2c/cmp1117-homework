@@ -27,39 +27,17 @@ def actionGet(options):
             actionGet(options)
         elif option == 2:
             filesList(SUBFOLDERS)
-            actionGet(options)
         elif option == 3:
             filesByFolder = filesList(SUBFOLDERS)
-            for folder, files in filesByFolder.items():
-                renamingOpts = buildChoicesForFiles({folder:files})
-                if len(renamingOpts.keys()) >= 1:
-                    for key, fileOpts in renamingOpts.items():
-                        fileType = OPTIONS_FILE[key]
-                        print("\n\tPick which '{}' file to rename:".format(fileType))
-                        oldName = fileOpts[printOptions(addOption(fileOpts, "GO BACK"))]
-                        while oldName != "GO BACK":
-                            fileNameOption = printOptions(addOption(OPTIONS_NAME, "GO BACK"))
-                            while fileNameOption != len(OPTIONS_NAME.keys()):
-                                if fileNameOption == 2:
-                                    newName = input("\n\tWhat would you like to rename your {} file?  ".format(fileType))
-                                else:
-                                    newName = fileNameGet(fileType)
-                                fileRename(oldName, newName, fileType)
-                                fileNameOption = len(OPTIONS_NAME.keys())
-                            oldName = "GO BACK"
-                    actionGet(options)
-                        #printOptions(addOption(renamingOpts, "GO BACK"))
-                else:
-                    print("\n\t\tNo files to rename in directory:  {}".format(folder))
-            actionGet(options)
+            folderOpts, fileOpts = buildChoicesForFiles(filesByFolder)
+            processChoicesForFiles(folderOpts, fileOpts)
         elif option == 4:
             configEdit()
         actionGet(options)
-        #print("\n\t\tOkay, let's " + OPTIONS[option].lower() + "...")
 
 def assignmentsFilter(dateString, config):
     today = dateString
-    today = "2019-11-21"
+    #today = "2019-11-21"
     scheduleData = getSchedule()
     '''
     for date, assignmentData in scheduleData["dictionary"].items():
@@ -118,9 +96,36 @@ def buildChoicesForFiles(listOfFiles):
             fileIndex = 1
             for file in files:
                 fileChoices[fileIndex] = file
+                fileIndex += 1
         choices[folderIndex] = fileChoices
         folderIndex += 1
-    return choices
+    return folderChoices, choices
+
+def processChoicesForFiles(folderOpts, fileOpts):
+    if len(folderOpts.keys()) >= 1:
+        print("\n Pick which type of file to rename:  ")
+        folderChoice = printOptions(addOption(folderOpts, "GO BACK"))
+        while folderChoice != len(folderOpts.keys()):
+            files = fileOpts[folderChoice]
+            fileType = folderOpts[folderChoice]
+            fileChoice = printOptions(addOption(files, "GO BACK"))
+            while fileChoice != len(files.keys()):
+                oldName = files[fileChoice]
+                fileNameOption = printOptions(addOption(OPTIONS_NAME, "GO BACK"))
+                while fileNameOption != len(OPTIONS_NAME.keys()):
+                    if fileNameOption == 2:
+                        newName = input(
+                            "\n\tWhat would you like to rename your {} "
+                            "file?  ".format(fileType))
+                    else:
+                        newName = fileNameGet(fileType)
+                    fileRename(oldName, newName, fileType)
+                    fileNameOption = len(OPTIONS_NAME.keys())
+                fileChoice = len(files.keys())
+            folderChoice = len(folderOpts.keys())
+    else:
+        print("\n\t\tNo files to rename in directory.")
+    return
 
 def main():
     config = configGet()
