@@ -3,6 +3,7 @@ import sys
 from os import path
 
 from calendar import getDate, getDateMANUAL, OPTIONS_DATE
+from config import configGet
 from helpers import printOptions
 
 BASEPATH = "assignments"
@@ -23,6 +24,10 @@ def fileCreate(name, fileType):
             print("\n\t\tATTENTION:  File already exists!")
         else:
             file = open(pathStr, "w")
+            config = configGet()
+            file.write("# Name:  {} {}\n".format(config["firstName"], config["lastName"]))
+            file.write("# Student ID:  {}\n".format(config["studentId"]))
+
     except FileNotFoundError:
         print("\n\tFileNotFoundError:  Creation of the file '%s' failed" % name)
         folderCreate(fileType)
