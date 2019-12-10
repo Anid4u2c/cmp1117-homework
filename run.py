@@ -71,6 +71,8 @@ def assignmentsFilter(dateString):
             fileType = assignmentMap[key].lower()
             response = input("\n Would you like to create a file for this "
                              "'{}' assignment ('Y' = 'Yes'):  ".format(fileType))
+            if fileType == "lab":
+                fileType += "s"
             if response.upper() in ["Y", "YES"] and len(response) > 0:
                 fileNameOption = printOptions(
                     addOption(OPTIONS_NAME, "GO BACK"))
@@ -80,7 +82,7 @@ def assignmentsFilter(dateString):
                             "\n\tWhat would you like to name your {} "
                             "file?  ".format(fileType))
                     else:
-                        if fileType == "lab":
+                        if fileType.lower() in ["lab", "labs"]:
                             fileTypeName = assignment["Lab"].lower()
                         elif fileType == "Homework":
                             fileTypeName = assignment["Homework"].lower()
