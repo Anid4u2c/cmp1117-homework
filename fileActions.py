@@ -16,7 +16,6 @@ def fileCreate(name, fileType):
     # detect the current working directory and print it
     pathStr = os.getcwd()
     print("\n\tThe current working directory is %s" % pathStr)
-    print("fileType:  ", fileType)
     pathStr = os.path.join(os.getcwd(), BASEPATH, fileType, name)
     try:
         if path.exists(pathStr):
@@ -53,7 +52,7 @@ def filesList(directories):
             if len(files) > 0:
                 filesStr = ""
                 for name in files:
-                    filesStr += "\t\t\t↳ FILE:  " + name
+                    filesStr += "\n\t\t\t↳ FILE:  " + name
                     filesByFolder[directory].append(name)
                 print("\n\t\tDIRECTORY: ", directory, "has", len(filesByFolder[directory]), "files:")
                 print(filesStr)

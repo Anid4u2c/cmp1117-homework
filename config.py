@@ -8,12 +8,9 @@ KEY_MAP = {"firstName": "First Name", "lastName": "Last Name",
            "studentId": "Student ID", "dateTime": "Last Updated"}
 TEMPLATE = ("dateTime", "files", "firstName", "lastName", "studentId")
 
-def configEdit(config):
-    response = input("\n Would you like to edit the current configuration ('Y' or 'Yes'):  ")
-    if response.upper() == "Y" and len(response) > 0:
-        return configSet(configOutput(userDataGet()))
-    else:
-        return config
+def configEdit():
+    return configSet(configOutput(userDataGet()))
+
 
 def configGet():
     print("\n Checking current folder for '.config' file...")
@@ -25,7 +22,9 @@ def configGet():
     except IOError:
         print("\n\tNo configuration file found.")
         config = configSet(userDataGet())
-    return configEdit(configOutput(config))
+    #return configEdit(configOutput(config))
+    return configOutput(config)
+
 
 
 def configOutput(config):

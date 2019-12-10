@@ -1,10 +1,11 @@
 from calendar import getDate, getSchedule, scheduleCheck
-from config import configGet
+from config import configGet, configEdit
 from fileActions import fileCreate, fileNameGet, fileRename, filesList, OPTIONS_FILE, SUBFOLDERS
 from helpers import addOption, printOptions
 
 OPTIONS_NAME = {1: "Allow the application to name the file for you.", 2: "Specify a name for your file."}
-OPTIONS = {1: "Create a file for an assignment", 2: "List all assignment files", 3: "Rename a assignment file"}
+OPTIONS = {1:"Create a file for an assignment", 2:"List all assignment files",
+           3:"Rename a assignment file", 4:"Edit your configuration"}
 
 def actionGet(options):
     option = printOptions(options)
@@ -51,12 +52,20 @@ def actionGet(options):
                 else:
                     print("\n\t\tNo files to rename in directory:  {}".format(folder))
             actionGet(options)
+        elif option == 4:
+            configEdit()
+        actionGet(options)
         #print("\n\t\tOkay, let's " + OPTIONS[option].lower() + "...")
 
 def assignmentsFilter(dateString, config):
     today = dateString
     today = "2019-11-21"
     scheduleData = getSchedule()
+    '''
+    for date, assignmentData in scheduleData["dictionary"].items():
+        #printOptions(buildChoicesForFiles({date:assignmentData}))
+        print("date:  ", date, "assignment:  ", assignmentData)
+    '''
     dates = scheduleData["list"]
     courseData = scheduleData["dictionary"]
     if scheduleCheck(today, dates):
@@ -74,7 +83,7 @@ def assignmentsFilter(dateString, config):
                 index += 1
         for key, value in assignmentOpts.items():
             fileType = assignmentMap[key].lower()
-            response = input("\n\tWould you like to create a file for today's "
+            response = input("\n Would you like to create a file for today's "
                              "'{}' assignment ('Y' = 'Yes'):  ".format(fileType))
             if response.upper() in ["Y", "YES"] and len(response) > 0:
                 fileNameOption = printOptions(
