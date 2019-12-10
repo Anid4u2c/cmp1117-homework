@@ -10,6 +10,8 @@ BASEPATH = "assignments"
 OPTIONS_FILE = {1: "homework", 2: "labs", 3: "case study"}
 SUBFOLDERS = tuple(OPTIONS_FILE.values())
 
+#A function ask the user to create a file and checks wheteher the file exists
+#or not and creates the file by getting firstname,lastname and student ID.
 def fileCreate(name, fileType):
     if type(fileType) == 'int' and fileType in OPTIONS_FILE.keys():
         fileType = OPTIONS_FILE[fileType]
@@ -68,6 +70,8 @@ def filesList(directories):
             folderCreate(directory)
     return filesByFolder
 
+#This function ask the user to allow the application to name the file
+#by getting chapters,exercise details and date.
 def fileNameGet(fileType):
     try:
         if type(fileType) == 'int' and fileType in OPTIONS_FILE.keys():
@@ -89,6 +93,7 @@ def fileNameGet(fileType):
         print("\n\t\tERROR:  Please enter a number for the Chapter and Excercise.")
         fileNameGet(fileType)
 
+#A function renames the file by checkimng that the new name does not exists.
 def fileRename(oldName, newName, fileType):
     # detect the current working directory and print it
     pathStr = os.getcwd()
@@ -109,6 +114,7 @@ def fileRename(oldName, newName, fileType):
         print("\n\tSUCCESS:  Renamed the '{}' file from '{}' to '{}'".format(fileType, oldName, newName))
 
 # SEE:  https://stackabuse.com/creating-and-deleting-directories-with-python/
+# A function checks the 'basepath' if it does not exists it creates the folder.
 def folderCreate(name):
     if path.exists(os.path.join(os.getcwd(), BASEPATH)):
         print("\n\tCreating folder named:", name)
@@ -129,6 +135,7 @@ def folderCreate(name):
         print("\n\tCreating '{}' folder for the first time.".format(BASEPATH))
         os.mkdir(os.path.join(os.getcwd(), BASEPATH))
         folderCreate(name)
+
 
 def foldersCreate(folders):
     for folder in folders:
