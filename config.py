@@ -70,8 +70,8 @@ def mapKey(key):
     return value
 
 def userDataGet():
-    firstName = input('\n\tEnter your first name: ')
-    lastName = input('\n\tEnter your last name: ')
-    studentId = input('\n\tEnter your student ID: ')
-    config = {"dateTime": getDateTime(), "firstName": firstName, "lastName": lastName, "studentId": studentId}
+    firstName = input('\n\t\tEnter your first name: ')
+    lastName = input('\n\t\tEnter your last name: ')
+    studentId = input('\n\t\tEnter your student ID: ')
+    config = {"dateTime": getDateTime(), "firstName": firstName, "lastName":lastName, "studentId":studentId}
     return config
