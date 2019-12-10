@@ -84,10 +84,10 @@ def fileNameGet(fileType):
         if chapter == "00" or exercise == "00":
             print("\n\t\tERROR:  Please enter the proper information.")
             fileNameGet(fileType)
+        return "ch" + chapter + ".ex" + exercise + "." + dateString + ".py"
     except ValueError:
         print("\n\t\tERROR:  Please enter a number for the Chapter and Excercise.")
         fileNameGet(fileType)
-    return "ch" + chapter + ".ex" + exercise + "." + dateString + ".py"
 
 def fileRename(oldName, newName, fileType):
     # detect the current working directory and print it
