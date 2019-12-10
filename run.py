@@ -1,4 +1,4 @@
-from calendar import getDate, getSchedule, scheduleCheck
+from calendar import getDate, getSchedule, scheduleCheck, SCHEDULE
 from config import configGet, configEdit
 from fileActions import fileCreate, fileNameGet, fileRename, filesList, OPTIONS_FILE, SUBFOLDERS
 from helpers import addOption, printOptions
@@ -6,7 +6,7 @@ from helpers import addOption, printOptions
 OPTIONS_NAME = {1: "Allow the application to name the file for you.", 2: "Specify a name for your file."}
 OPTIONS = {1:"Create a file for an assignment", 2:"List all assignment files",
            3:"Rename a assignment file", 4:"Edit your configuration"}
-SCHEDULE_DATA = getSchedule()
+SCHEDULE_DATA = getSchedule(SCHEDULE)
 
 # A function that gets the allows the user to choose from the main 'OPTIONS',
 # and then performs the selected action.
@@ -15,6 +15,14 @@ def actionGet(options):
     while option != len(OPTIONS.keys()):
         print("\n\t Okay, let's " + OPTIONS[option].lower() + "...")
         if option == 1:
+            response = input("\n Would you like to create a file for a "
+                             "specific date ('Y' = 'Yes'):  ")
+            if response.upper() in ["Y", "YES"]:
+                dateOpts, assignmentOpts = buildChoicesForDates(
+                    SCHEDULE_DATA['dictionary'])
+                dateString = processChoicesForDates(dateOpts)
+                while dateString != len(dateOpts.keys()):
+                    assignmentsFilter(dateString)
             fileInt = printOptions(addOption(OPTIONS_FILE, "GO BACK"))
             fileType = OPTIONS_FILE[fileInt]
             while fileInt != len(OPTIONS_FILE.keys()):
@@ -47,7 +55,8 @@ def assignmentsFilter(dateString):
     courseData = SCHEDULE_DATA["dictionary"]
     if scheduleCheck(today, dates):
         assignment = courseData[today]
-        print("\n\tThere's an assignment on {}, in week {}".format(today,assignment["Week"]))
+        print("\n\tThere's assignment data for {}, in week {}"
+              .format(today,assignment["Week"]))
         assignmentOpts = {}
         assignmentMap = {}
         index = 1
@@ -81,14 +90,15 @@ def assignmentsFilter(dateString):
                     fileCreate(fileName, fileType)
                     fileNameOption = len(OPTIONS_NAME.keys())
     else:
-        print("\n\t\tThere are no assignment today.")
-        response = input("\n Would you like to create a file for a "
-                         "different date ('Y' = 'Yes'):  ")
-        if response.upper() in ["Y", "YES"]:
-            dateOpts, assignmentOpts = buildChoicesForDates(
-                SCHEDULE_DATA['dictionary'])
-            dateString = processChoicesForDates(dateOpts)
-            assignmentsFilter(dateString)
+        dateOpts, assignmentOpts = buildChoicesForDates(
+            SCHEDULE_DATA['dictionary'])
+        while today is not None:
+            print("\n\t\tThere's no assignment data for {}".format(today))
+            response = input("\n Would you like to create a file for a "
+                             "different date ('Y' = 'Yes'):  ")
+            if response.upper() in ["Y", "YES"]:
+                dateString = processChoicesForDates(dateOpts)
+                assignmentsFilter(dateString)
     actionGet(addOption(OPTIONS, "QUIT"))
 
 # A function that returns choices for dates and assignments.  'dateChoices'
@@ -173,9 +183,7 @@ def processChoicesForFiles(folderOpts, fileOpts):
 
 def main():
     config = configGet()
-    # webbrowser.open('file://' + os.path.realpath(FILENAME))
     today = getDate()
-    today = "2019-12-9"
     print("\n Great {}!  Today's date is {}.".format(config["firstName"], today))
     assignmentsFilter(today)
 
